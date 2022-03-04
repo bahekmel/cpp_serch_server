@@ -20,7 +20,7 @@ void FindTopDocuments(const SearchServer& search_server, const std::string& raw_
 	}
 }
 
-void MatchDocuments(const SearchServer& search_server, const std::string& query) {
+void MatchDocuments(const SearchServer& search_server, std::string_view query) {
 	try {
 		std::cout << "Матчинг документов по запросу: "s << query << std::endl;
 		const int document_count = search_server.GetDocumentCount();

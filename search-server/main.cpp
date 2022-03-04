@@ -1,11 +1,11 @@
-//#include "process_queries.h"
+#include "process_queries.h"
 #include "log_duration.h"
-//#include "test_example_functions.h"
-//#include "remove_duplicates.h"
+#include "test_example_functions.h"
+#include "remove_duplicates.h"
 #include "search_server.h"
-//#include "request_queue.h"
-//#include "paginator.h"
-//#include "process_queries.h"
+#include "request_queue.h"
+#include "paginator.h"
+#include "process_queries.h"
 
 
 #include <iostream>
@@ -114,20 +114,21 @@ int main() {
             // 0 words for document 3
         }
     }
-    {
-    mt19937 generator;
 
-    const auto dictionary = GenerateDictionary(generator, 1000, 10);
-    const auto documents = GenerateQueries(generator, dictionary, 10'000, 70);
+    //{
+    //mt19937 generator;
 
-    const string query = GenerateQuery(generator, dictionary, 500, 0.1);
+    //const auto dictionary = GenerateDictionary(generator, 1000, 10);
+    //const auto documents = GenerateQueries(generator, dictionary, 10'000, 70);
 
-    SearchServer search_server(dictionary[0]);
-    for (size_t i = 0; i < documents.size(); ++i) {
-        search_server.AddDocument(i, documents[i], DocumentStatus::ACTUAL, { 1, 2, 3 });
-    }
+    //const string query = GenerateQuery(generator, dictionary, 500, 0.1);
 
-    TEST(seq);
-    TEST(par);
-}
+    //SearchServer search_server(dictionary[0]);
+    //for (size_t i = 0; i < documents.size(); ++i) {
+    //    search_server.AddDocument(i, documents[i], DocumentStatus::ACTUAL, { 1, 2, 3 });
+    //    }
+
+    //TEST(seq);
+    //TEST(par);
+    //}
 }

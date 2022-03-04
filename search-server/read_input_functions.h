@@ -12,5 +12,5 @@ std::ostream& operator<<(std::ostream& out, const Document& document);
 
 void PrintDocument(const Document& document);
 
-void PrintMatchDocumentResult(int document_id, const std::vector<std::string>& words,
+void PrintMatchDocumentResult(int document_id, const std::vector<std::string_view>& words,
 							  DocumentStatus status);
