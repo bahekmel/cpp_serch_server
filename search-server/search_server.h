@@ -317,7 +317,7 @@ SearchServer::SearchServer(const StringContainer& stop_words)
 template<typename DocumentPredicate>
 std::vector<Document> SearchServer::FindTopDocuments(std::string_view raw_query,
 	DocumentPredicate document_predicate) const {
-	const auto query = ParseQuery(raw_query, true);   ///bool skip_sort
+	const auto query = ParseQuery(raw_query, false);   ///bool skip_sort
 
 	auto matched_documents = FindAllDocuments(query, document_predicate);
 
