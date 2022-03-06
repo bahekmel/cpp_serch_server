@@ -1,6 +1,6 @@
 #include "test_example_functions.h"
 
-void AddDocument(SearchServer& search_server, int document_id, const std::string& document,
+void AddDocument(SearchServer& search_server, int document_id, std::string_view document,
 	DocumentStatus status, const std::vector<int>& ratings) {
 	try {
 		search_server.AddDocument(document_id, document, status, ratings);
@@ -10,7 +10,7 @@ void AddDocument(SearchServer& search_server, int document_id, const std::string
 	}
 }
 
-void FindTopDocuments(const SearchServer& search_server, const std::string& raw_query) {
+void FindTopDocuments(const SearchServer& search_server, std::string_view raw_query) {
 	std::cout << "Результаты поиска по запросу: "s << raw_query << std::endl;
 	try {
 		for (const Document& document : search_server.FindTopDocuments(raw_query)) {
@@ -22,7 +22,7 @@ void FindTopDocuments(const SearchServer& search_server, const std::string& raw_
 	}
 }
 
-void MatchDocuments(const SearchServer& search_server, const std::string& query) {
+void MatchDocuments(const SearchServer& search_server, std::string_view query) {
 	try {
 		std::cout << "Матчинг документов по запросу: "s << query << std::endl;
 		const int document_count = search_server.GetDocumentCount();
