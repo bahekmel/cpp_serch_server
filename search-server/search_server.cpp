@@ -415,7 +415,7 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(std::string_view r
     return MatchDocument(std::execution::seq, raw_query, document_id);
 }
 
-///-----------------------------------Авторское---seq---------------------------------///
+///-----------------------   Авторское   seq   --------------------///
 SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::execution::sequenced_policy&, 
                                         std::string_view raw_query, int document_id) const {
 
@@ -447,7 +447,7 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::executi
     }
     return {matched_words, status};
 }
-///-----------------------------------Авторское---par---------------------------------///
+///---------------------     Авторское---par    -------------///
 SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::execution::parallel_policy&, 
                                         std::string_view raw_query, int document_id) const {
     	
