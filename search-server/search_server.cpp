@@ -10,10 +10,6 @@ SearchServer::SearchServer(const std::string& stop_words_text)
     : SearchServer(std::string_view(stop_words_text)) {
 }
 
-
-
-
-
 void SearchServer::AddDocument(int document_id, std::string_view document,
     DocumentStatus status, const std::vector<int>& ratings) {
 
@@ -32,13 +28,6 @@ void SearchServer::AddDocument(int document_id, std::string_view document,
     }
     document_ids_.insert(document_id);
 }
-
-
-
-
-
-
-
 
 std::vector<Document> SearchServer::FindTopDocuments(std::string_view raw_query,
     DocumentStatus status) const {
@@ -64,17 +53,10 @@ std::vector<Document> SearchServer::FindTopDocuments(const std::execution::paral
         });
 }
 
+// 4
 std::vector<Document> SearchServer::FindTopDocuments(std::string_view raw_query) const {
     return FindTopDocuments(std::execution::seq, raw_query, DocumentStatus::ACTUAL);
 }
-
-
-
-
-
-
-
-
 
 
 int SearchServer::GetDocumentCount() const {
@@ -137,9 +119,6 @@ void SearchServer::RemoveDocument(const std::execution::parallel_policy&, int do
     }
 }
 
-
-
-
 const std::map<std::string_view, double>& SearchServer::GetWordFrequencies(int document_id) const {
     static const std::map<std::string_view, double> dimmy;
     if (document_to_word_freqs_.count(document_id) == 0) {
@@ -150,7 +129,6 @@ const std::map<std::string_view, double>& SearchServer::GetWordFrequencies(int d
 
 
 bool SearchServer::IsStopWord(std::string_view word) const {
-    /*return stop_words_.count(static_cast<std::string>(word)) > 0;*/
     return stop_words_.count(word) > 0;
 }
 
@@ -201,9 +179,6 @@ SearchServer::QueryWord SearchServer::ParseQueryWord(std::string_view word) cons
     return { word, is_minus, IsStopWord(word) };
 }
 
-
-
-///-------------------------------Авторское----------------------------------///
 SearchServer::Query SearchServer::ParseQuery(std::string_view text, bool skip_sort) const {
     Query result;
 
@@ -232,7 +207,6 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(std::string_view r
     return MatchDocument(std::execution::seq, raw_query, document_id);
 }
 
-///-----------------------------------Авторское---seq---------------------------------///
 SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::execution::sequenced_policy&,
     std::string_view raw_query, int document_id) const {
 
@@ -240,10 +214,9 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::executi
         using namespace std::literals::string_literals;
         throw std::out_of_range("incorrect document id"s);
     }
-
     using namespace std;
-
-    const auto query = ParseQuery(raw_query, false);   ///bool skip_sort
+    bool police_status = false;
+    const auto query = ParseQuery(raw_query, police_status);
     const auto status = documents_.at(document_id).status;
     for (const std::string_view word : query.minus_words) {
         if (word_to_document_freqs_.count(word) == 0) {
@@ -264,7 +237,7 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::executi
     }
     return { matched_words, status };
 }
-///-----------------------------------Авторское---par---------------------------------///
+
 SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::execution::parallel_policy&,
     std::string_view raw_query, int document_id) const {
 
@@ -272,8 +245,8 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::executi
         using namespace std::literals::string_literals;
         throw std::out_of_range("document_id incorrect!"s);
     }
-
-    const auto query = ParseQuery(raw_query, true);   ///bool skip_sort
+    bool police_status = true;
+    const auto query = ParseQuery(raw_query, police_status);
     const auto status = documents_.at(document_id).status;
 
     const auto word_checker = [this, document_id](const std::string_view word) {

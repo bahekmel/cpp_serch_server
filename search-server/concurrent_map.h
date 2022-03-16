@@ -4,11 +4,10 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#include <cstdlib>
 
 
 using namespace std::string_literals;
-
-//====================== ConcurrentMap =========================//
 
 
 template <typename Key, typename Value>
@@ -23,14 +22,14 @@ public:
 	static_assert(std::is_integral_v<Key>, "ConcurrentMap supports only integer keys"s);
 
 	struct Access {
-		std::lock_guard<std::mutex> guard;
-		Value& ref_to_value;
-
-		Access(const Key& key, Bucket& bucket)
-			: guard(bucket.mutex),
-			 ref_to_value(bucket.map[key]) {
-		}
-	};
+        std::lock_guard<std::mutex> guard;
+        Value& ref_to_value;
+ 
+        Access(const Key& key, Bucket& bucket)
+            : guard(bucket.mutex)
+            , ref_to_value(bucket.map[key]) {
+        }
+    };
 
 	explicit ConcurrentMap(size_t bucket_count)
 		: buckets_(bucket_count) {
@@ -50,10 +49,7 @@ public:
 		return result;
 	}
 
-	//template <typename Key, typename Value>
-
-
-	auto ConcurrentMap<Key, Value>::Erase(const Key& key) {
+	auto Erase(const Key& key) {
 		uint64_t tmp_key = static_cast<uint64_t>(key) % buckets_.size();
 		std::lock_guard guard(buckets_[tmp_key].mutex);
 		return buckets_[tmp_key].map.erase(key);
@@ -61,6 +57,5 @@ public:
 
 private:
 	std::vector<Bucket> buckets_;
-
 };
 
