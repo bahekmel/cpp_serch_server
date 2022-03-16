@@ -94,6 +94,7 @@ int main() {
         int id = 0;
         for (
             const string& text : {
+                
                 "white cat and yellow hat"s,
                 "curly cat curly tail"s,
                 "nasty dog with big eyes"s,
@@ -102,14 +103,12 @@ int main() {
             ) {
             search_server.AddDocument(++id, text, DocumentStatus::ACTUAL, { 1, 2 });
         }
-
-
-
-
+        
+        
         // Проверка на корректность работы
 
         cout << "ACTUAL by default:"s << endl;
-        //последовательная версия
+        //последовательная версия                                     
         for (const Document& document : search_server.FindTopDocuments("curly nasty cat"s)) {
             PrintDocument(document);
         }
@@ -126,22 +125,20 @@ int main() {
         }
     }
 
-
-
-    // Проверка на скорость работы
+     //Проверка на скорость работы
     {
         mt19937 generator;
-
+    
         const auto dictionary = GenerateDictionary(generator, 1000, 10);
         const auto documents = GenerateQueries(generator, dictionary, 10'000, 70);
-
+    
         SearchServer search_server(dictionary[0]);
         for (size_t i = 0; i < documents.size(); ++i) {
             search_server.AddDocument(i, documents[i], DocumentStatus::ACTUAL, { 1, 2, 3 });
         }
-
+    
         const auto queries = GenerateQueries(generator, dictionary, 100, 70);
-
+    
         TEST(seq);
         TEST(par);
     }
@@ -150,10 +147,10 @@ int main() {
 
 
 
-    // Предыдущее задание
+     //Предыдущее задание
     {
         SearchServer search_server("and with"s);
-
+    
         int id = 0;
         for (
             const string& text : {
@@ -166,44 +163,44 @@ int main() {
             ) {
             search_server.AddDocument(++id, text, DocumentStatus::ACTUAL, { 1, 2 });
         }
-
+    
         const string query = "curly and funny -not"s;
-
+    
         {
             const auto [words, status] = search_server.MatchDocument(query, 1);
             cout << words.size() << " words for document 1"s << endl;
             // 1 words for document 1
         }
-
+    
         {
             const auto [words, status] = search_server.MatchDocument(execution::seq, query, 2);
             cout << words.size() << " words for document 2"s << endl;
             // 2 words for document 2
         }
-
+    
         {
             const auto [words, status] = search_server.MatchDocument(execution::par, query, 3);
             cout << words.size() << " words for document 3"s << endl;
             // 0 words for document 3
         }
     }
-
-    //{
-    //    mt19937 generator;
-
-    //    const auto dictionary = GenerateDictionary(generator, 1000, 10);
-    //    const auto documents = GenerateQueries(generator, dictionary, 10'000, 70);
-
-    //    const string query = GenerateQuery(generator, dictionary, 500, 0.1);
-
-    //    SearchServer search_server(dictionary[0]);
-    //    for (size_t i = 0; i < documents.size(); ++i) {
-    //        search_server.AddDocument(i, documents[i], DocumentStatus::ACTUAL, { 1, 2, 3 });
-    //    }
-
-    //    TEST1(seq);
-    //    TEST1(par);
-    //}
+    
+    {
+        mt19937 generator;
+    
+        const auto dictionary = GenerateDictionary(generator, 1000, 10);
+        const auto documents = GenerateQueries(generator, dictionary, 10'000, 70);
+    
+        const string query = GenerateQuery(generator, dictionary, 500, 0.1);
+    
+        SearchServer search_server(dictionary[0]);
+        for (size_t i = 0; i < documents.size(); ++i) {
+            search_server.AddDocument(i, documents[i], DocumentStatus::ACTUAL, { 1, 2, 3 });
+        }
+    
+        TEST1(seq);
+        TEST1(par);
+    }
 
 }
 
