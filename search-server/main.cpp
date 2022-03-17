@@ -103,8 +103,16 @@ int main() {
             ) {
             search_server.AddDocument(++id, text, DocumentStatus::ACTUAL, { 1, 2 });
         }
+
+        //search_server.RemoveDocument(1);
         
-        
+        //search_server.RemoveDocument(std::execution::seq, 1);
+
+        //search_server.RemoveDocument(std::execution::par, 2);
+        //search_server.RemoveDocument(std::execution::par, 3);
+        //search_server.RemoveDocument(std::execution::par, 4);
+        //search_server.RemoveDocument(std::execution::par, 5);
+
         // Проверка на корректность работы
 
         cout << "ACTUAL by default:"s << endl;

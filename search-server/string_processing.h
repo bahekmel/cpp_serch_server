@@ -6,10 +6,6 @@
 #include <set>
 
 
-std::string ReadLine();
-
-int ReadLineWithNumber();
-
 std::vector<std::string_view> SplitIntoWords(std::string_view str);
 
 

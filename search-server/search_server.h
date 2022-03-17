@@ -145,9 +145,9 @@ SearchServer::SearchServer(const StringContainer& stop_words)
 template <typename ExecutionPolicy, typename DocumentPredicate>
 std::vector<Document> SearchServer::FindTopDocuments(ExecutionPolicy&& police, std::string_view raw_query, DocumentPredicate document_predicate) const {
 
-	bool police_status = std::is_same_v<ExecutionPolicy, std::execution::sequenced_policy>;
+	bool skip_sort = std::is_same_v<ExecutionPolicy, std::execution::sequenced_policy>;
 
-	const auto query = ParseQuery(raw_query, police_status);
+	const auto query = ParseQuery(raw_query, skip_sort);
 	auto matched_documents = FindAllDocuments(police, query, document_predicate);
 	std::sort(police, matched_documents.begin(), matched_documents.end(),
 		[](const Document& lhs, const Document& rhs) {
@@ -239,6 +239,7 @@ std::vector<Document> SearchServer::FindAllDocuments(const SearchServer::Query& 
 template <class ExecutionPolicy>
 void SearchServer::RemoveDocument(ExecutionPolicy&& policy, int document_id) {
 	const auto& word_freqs = document_to_words_.at(document_id);
+	std::mutex value_mutex;
 	std::vector<const std::string*> words(word_freqs.size());
 	std::transform(
 		policy,
@@ -248,7 +249,8 @@ void SearchServer::RemoveDocument(ExecutionPolicy&& policy, int document_id) {
 			return &word.first;
 		});
 	std::for_each(policy, words.begin(), words.end(),
-		[this, document_id](const std::string* word) {
+		[this, document_id, value_mutex](const std::string* word) {
+			std::lock_guard guard(value_mutex);
 			word_to_document_freqs_.at(*word).erase(document_id);
 		});
 

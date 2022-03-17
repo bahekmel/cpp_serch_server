@@ -8,6 +8,10 @@
 
 using namespace std::string_literals;
 
+std::string ReadLine();
+
+int ReadLineWithNumber();
+
 std::ostream& operator<<(std::ostream& out, const Document& document);
 
 void PrintDocument(const Document& document);

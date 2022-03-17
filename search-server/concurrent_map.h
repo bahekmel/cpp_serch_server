@@ -30,7 +30,7 @@ public:
             , ref_to_value(bucket.map[key]) {
         }
     };
-	//ñonst size_t currIdx = static_cast<uint64_t>(key) % bucketCount;
+
 	explicit ConcurrentMap(size_t bucket_count)
 		: buckets_(bucket_count) {
 	}

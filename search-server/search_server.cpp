@@ -78,8 +78,8 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::executi
 		throw std::out_of_range("incorrect document id"s);
 	}
 	using namespace std;
-	bool police_status = false;
-	const auto query = ParseQuery(raw_query, police_status);
+	bool skip_sort = false;
+	const auto query = ParseQuery(raw_query, skip_sort);
 	const auto status = documents_.at(document_id).status;
 	for (const std::string_view word : query.minus_words) {
 		if (word_to_document_freqs_.count(word) == 0) {
@@ -108,8 +108,8 @@ SearchServer::MatchDocumentResult SearchServer::MatchDocument(const std::executi
 		using namespace std::literals::string_literals;
 		throw std::out_of_range("document_id incorrect!"s);
 	}
-	bool police_status = true;
-	const auto query = ParseQuery(raw_query, police_status);
+	bool skip_sort = true;
+	const auto query = ParseQuery(raw_query, skip_sort);
 	const auto status = documents_.at(document_id).status;
 
 	const auto word_checker = [this, document_id](const std::string_view word) {
